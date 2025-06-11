@@ -52,7 +52,6 @@ const RatingModal = ({ open, handleClose, refetchRatings }) => {
     try {
       const formData = { ...data, userID: user?.id, courseID: params.id };
       const response = await addRating(formData).unwrap();
-      console.log("response", response);
       setMessage(response?.message);
       reset();
       handleClose();

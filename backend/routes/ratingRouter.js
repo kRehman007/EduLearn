@@ -4,7 +4,7 @@ const { route } = require("./adminRouter");
 const router = express.Router();
 
 router.post("/", async (req, res) => {
-  console.log("req.body", req.body);
+
   try {
     const { comment, rating, userID, courseID } = req.body;
     await ratingModel.create({

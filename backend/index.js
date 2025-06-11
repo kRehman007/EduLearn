@@ -62,8 +62,6 @@ app.use(
 app.get("/auth/check", checkForAuthentication("token"), (req, res) => {
   try {
     const user = req.user;
-    console.log(user);
-    console.log("user", user);
     if (!user) {
       return res.status(401).json({ msg: "Login first" });
     }

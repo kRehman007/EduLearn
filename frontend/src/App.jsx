@@ -12,7 +12,6 @@ import PageNotFound from "./Components/PageNotFound";
 
 function App() {
   const { user } = useAuth();
-  console.log("user info:- ", user);
   return (
     <>
       <Routes>

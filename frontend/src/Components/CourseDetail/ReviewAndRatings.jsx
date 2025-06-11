@@ -13,7 +13,7 @@ function ReviewAndRatings() {
   const [showComment, setShowComment] = useState(false);
   const { data, isLoading } = useGetAllRatingsQuery(params.id);
   const { user } = useUserAuth();
-  console.log(user?.fullname);
+
 
   if (isLoading) {
     return <LoaderIcon />;

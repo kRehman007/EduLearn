@@ -2,7 +2,7 @@ const courseModel = require("../models/course-model");
 const upload = require("../config/multer_config");
 
 const adminForm = async (req, res) => {
-  console.log(req.body);
+
   const {
     name,
     bio,

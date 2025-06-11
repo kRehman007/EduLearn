@@ -10,7 +10,7 @@ const Detail = () => {
     setDetail(location?.state);
   }, []);
 
-  console.log("Detail", detail);
+
   return (
     <Container sx={{ mt: 5 }}>
       <Typography

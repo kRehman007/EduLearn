@@ -6,7 +6,6 @@ import { useGetSingleStudentQuery } from "../../Redux/API/courseAPI";
 
 const Detail2 = () => {
   const params = useParams();
-  console.log("id", params.id);
   const { data } = useGetSingleStudentQuery({ id: params.id });
   const [detail, setDetail] = useState([]);
   const location = useLocation();

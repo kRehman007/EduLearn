@@ -12,7 +12,6 @@ function checkForAuthentication(cookieName) {
       const payload = ValidateToken(tokenCookieValue);
       req.user = payload;
     } catch (error) {
-      console.log("token authentication failed");
       return res.status(500).json({ msg: `${error}` });
     }
 

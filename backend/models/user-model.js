@@ -30,7 +30,6 @@ userSchema.static(
   "matchPasswordAndGenerateToken",
   async function (email, password) {
     const user = await this.findOne({ email });
-    console.log("user", user);
     if (!user) throw new Error("user not found");
 
     const userProvidedHash = crypto

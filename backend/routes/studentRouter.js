@@ -24,7 +24,6 @@ router.post("/", async (req, res) => {
     }
     // Check if the student exists by email
     const { course_title } = await courseModel.findOne({ _id: courseId });
-    console.log("std", course_title);
     const student = await StudentModel.findOne({ email });
 
     if (student) {
@@ -80,7 +79,6 @@ const sendEnrollmentEmail = async (fullName, email, course_title) => {
 
   try {
     await transporter.sendMail(mailOptions);
-    console.log("Enrollment email sent successfully.");
   } catch (error) {
     console.error("Failed to send enrollment email:", error);
   }
@@ -92,13 +90,11 @@ router.get("/total/:id", async (req, res) => {
 
     // Fetch all students and populate the subjects
     const students = await StudentModel.find({}).populate("subjects");
-    console.log("std", students);
     // Filter the students based on the course ID in their subjects
     const totalStudents = students.filter((student) => {
       return student.subjects.some((subject) => subject._id.equals(courseId)); // Use .equals for ObjectId comparison
     });
 
-    console.log("Total students in the course:", totalStudents.length);
     return res.status(200).json({ totalStudents: totalStudents.length });
   } catch (error) {
     return res.json(500).json({ error: "failed to fetch error" });

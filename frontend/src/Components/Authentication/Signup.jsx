@@ -42,7 +42,7 @@ const Signup = () => {
   const onSubmit = async (data) => {
     try {
       const response = await userSignup(data).unwrap();
-      console.log("response", response);
+
       reset();
       navigate("/login");
     } catch (error) {
