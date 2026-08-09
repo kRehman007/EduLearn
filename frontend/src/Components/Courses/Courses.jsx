@@ -1,6 +1,5 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import Lists from "./Lists";
-import { useNavigate } from "react-router-dom";
 import { useGetCourseMutation } from "../../Redux/API/courseAPI";
 import Nav from "../Home/Nav";
 import LoaderIcon from "../Loader";

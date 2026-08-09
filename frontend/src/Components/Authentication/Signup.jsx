@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import {
   Button,
   CircularProgress,
@@ -7,6 +7,7 @@ import {
   TextField,
   Box,
   Typography,
+  InputAdornment,
 } from "@mui/material";
 import logo from "../../assets/LogoDesign.webp";
 import { useNavigate } from "react-router-dom";
@@ -15,6 +16,8 @@ import { z } from "zod";
 import { useForm } from "react-hook-form";
 import { useUserSignupMutation } from "../../Redux/API/userAPI";
 import Toast from "../Toast";
+import { FiMail, FiLock, FiUser, FiAtSign } from "react-icons/fi";
+import { FaArrowRightLong } from "react-icons/fa6";
 
 const schema = z.object({
   fullname: z.string().nonempty("Fullname is required"),
@@ -41,8 +44,7 @@ const Signup = () => {
 
   const onSubmit = async (data) => {
     try {
-      const response = await userSignup(data).unwrap();
-
+      await userSignup(data).unwrap();
       reset();
       navigate("/login");
     } catch (error) {
@@ -53,43 +55,44 @@ const Signup = () => {
     }
   };
 
+  const fieldStyle = {
+    "& .MuiOutlinedInput-root": {
+      borderRadius: "10px",
+    },
+  };
+
   return (
-    <div className="w-full min-h-screen bg-gray-800 text-white">
-      <Container sx={{ pt: { xs: 10 } }}>
-        {msg && <Toast value={msg} severity="error" />}
+    <div className="w-full min-h-screen bg-appbg">
+      {msg && <Toast value={msg} severity="error" />}
+      <Container
+        maxWidth="lg"
+        sx={{ minHeight: "100vh", display: "flex", alignItems: "center", py: { xs: 6, md: 4 } }}
+      >
         <Box
-          sx={{ display: "flex" }}
-          className="border border-gray-600 rounded-md"
+          className="card-soft overflow-hidden"
+          sx={{ display: "flex", width: "100%", borderRadius: "24px", border: "none" }}
         >
           <Box
             sx={{
-              width: "48%",
-              display: { xs: "none", md: "block" },
-              height: "500px",
-            }}
-          >
-            <img src={logo} className="w-full h-full object-cover" />
-          </Box>
-          <Box
-            sx={{
-              width: { xs: "95%", md: "48%" },
+              width: { xs: "100%", md: "54%" },
               display: "flex",
               flexDirection: "column",
               justifyContent: "center",
               alignItems: "center",
-              p: 2,
+              py: { xs: 6, md: 7 },
+              px: { xs: 3, sm: 6 },
             }}
           >
-            <img src={logo} className="w-16 h-16 mt-1 rounded-full lg:hidden" />
-            <Typography
-              variant="h5"
-              className="font-montserrat "
-              sx={{ color: "#673ab7", textAlign: "center", mt: 1 }}
-            >
+            <img src={logo} className="w-16 h-16 rounded-full object-cover mb-4" />
+            <Typography variant="h5" className="font-montserrat font-bold" sx={{ color: "#1e293b" }}>
               Create an Account
             </Typography>
+            <Typography className="font-roboto" sx={{ color: "#64748b", fontSize: "14px", mt: 1, mb: 4 }}>
+              Join EduLearn and start learning today
+            </Typography>
+
             <form
-              className=" w-full sm:w-3/4   flex flex-col gap-3 p-3   "
+              className="w-full max-w-sm flex flex-col gap-4"
               onSubmit={handleSubmit(onSubmit)}
               autoComplete="off"
             >
@@ -101,20 +104,13 @@ const Signup = () => {
                 {...register("fullname")}
                 error={!!errors.name}
                 helperText={errors.name?.message}
-                sx={{
-                  "& .MuiInputLabel-root": {
-                    color: "#fff",
-                    opacity: 0.5,
-                  },
-                  "& .MuiInputBase-input": {
-                    color: "#ffffff",
-                  },
-                  "& .MuiOutlinedInput-root": {
-                    "& fieldset": {
-                      borderColor: "#ffffff",
-                      opacity: 0.4,
-                    },
-                  },
+                sx={fieldStyle}
+                InputProps={{
+                  startAdornment: (
+                    <InputAdornment position="start">
+                      <FiUser size={16} color="#6d5ae6" />
+                    </InputAdornment>
+                  ),
                 }}
               />
               <TextField
@@ -125,20 +121,13 @@ const Signup = () => {
                 {...register("username")}
                 error={!!errors.username}
                 helperText={errors.username?.message}
-                sx={{
-                  "& .MuiInputLabel-root": {
-                    color: "#fff",
-                    opacity: 0.5,
-                  },
-                  "& .MuiInputBase-input": {
-                    color: "#ffffff",
-                  },
-                  "& .MuiOutlinedInput-root": {
-                    "& fieldset": {
-                      borderColor: "#ffffff",
-                      opacity: 0.4,
-                    },
-                  },
+                sx={fieldStyle}
+                InputProps={{
+                  startAdornment: (
+                    <InputAdornment position="start">
+                      <FiAtSign size={16} color="#6d5ae6" />
+                    </InputAdornment>
+                  ),
                 }}
               />
               <TextField
@@ -149,20 +138,13 @@ const Signup = () => {
                 {...register("email")}
                 error={!!errors.email}
                 helperText={errors.email?.message}
-                sx={{
-                  "& .MuiInputLabel-root": {
-                    color: "#fff",
-                    opacity: 0.5,
-                  },
-                  "& .MuiInputBase-input": {
-                    color: "#ffffff",
-                  },
-                  "& .MuiOutlinedInput-root": {
-                    "& fieldset": {
-                      borderColor: "#ffffff",
-                      opacity: 0.4,
-                    },
-                  },
+                sx={fieldStyle}
+                InputProps={{
+                  startAdornment: (
+                    <InputAdornment position="start">
+                      <FiMail size={16} color="#6d5ae6" />
+                    </InputAdornment>
+                  ),
                 }}
               />
               <TextField
@@ -173,68 +155,70 @@ const Signup = () => {
                 {...register("password")}
                 error={!!errors.password}
                 helperText={errors.password?.message}
-                sx={{
-                  "& .MuiInputLabel-root": {
-                    color: "#fff",
-                    opacity: 0.5,
-                  },
-                  "& .MuiInputBase-input": {
-                    color: "#ffffff",
-                  },
-                  "& .MuiOutlinedInput-root": {
-                    "& fieldset": {
-                      borderColor: "#ffffff",
-                      opacity: 0.4,
-                    },
-                  },
+                sx={fieldStyle}
+                InputProps={{
+                  startAdornment: (
+                    <InputAdornment position="start">
+                      <FiLock size={16} color="#6d5ae6" />
+                    </InputAdornment>
+                  ),
                 }}
               />
               <Button
                 type="submit"
                 disabled={isSubmitting}
-                sx={{
-                  background: "#e91367",
-                  color: "#fff",
-                  padding: "7px 25px",
-                  textTransform: "capitalize",
-                  "&:hover": {
-                    transform: "scale(1.04)",
-                  },
-                }}
-                className="w-[max-content]"
+                className="btn-primary w-full"
+                endIcon={!isSubmitting && <FaArrowRightLong size={16} />}
+                sx={{ py: 1.2 }}
               >
                 {isSubmitting ? (
-                  <CircularProgress color="secondary" size="25px" />
+                  <CircularProgress size="24px" sx={{ color: "#fff" }} />
                 ) : (
                   "Signup"
                 )}
               </Button>
             </form>
-            <Stack
-              direction="row"
-              justifyContent="center"
-              alignItems="center"
-              mt={{ xs: "20px", md: "10px" }}
-            >
-              <Typography
-                className="font-roboto"
-                sx={{ color: "#fff", fontSize: "14px" }}
-              >
+
+            <Stack direction="row" alignItems="center" sx={{ mt: 3 }}>
+              <Typography className="font-roboto" sx={{ color: "#64748b", fontSize: "14px" }}>
                 Already have an account?
               </Typography>
               <Typography
                 onClick={() => navigate("/login")}
                 sx={{
-                  color: "#673ab7",
-                  textDecoration: "underline",
+                  color: "#6d5ae6",
+                  fontWeight: 600,
                   fontSize: "14px",
-                  mt: -0.5,
+                  ml: 0.5,
+                  cursor: "pointer",
+                  "&:hover": { textDecoration: "underline" },
                 }}
-                className="font-roboto underline-offset-4 pl-1 cursor-pointer"
+                className="font-roboto"
               >
                 Login
               </Typography>
             </Stack>
+          </Box>
+
+          <Box
+            sx={{
+              width: "46%",
+              display: { xs: "none", md: "flex" },
+              flexDirection: "column",
+              justifyContent: "center",
+              alignItems: "center",
+              p: 6,
+              background: "linear-gradient(140deg,#e91367 0%,#6d5ae6 120%)",
+              color: "#fff",
+            }}
+          >
+            <Typography variant="h4" className="font-montserrat font-bold" sx={{ textAlign: "center" }}>
+              Start Your Learning Journey
+            </Typography>
+            <Typography className="font-roboto" sx={{ mt: 2, textAlign: "center", opacity: 0.9, fontSize: "15px" }}>
+              Join thousands of learners gaining new skills with expert-led
+              courses, mentorship and real-world projects.
+            </Typography>
           </Box>
         </Box>
       </Container>

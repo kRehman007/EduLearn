@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import {
   Button,
   CircularProgress,
@@ -7,6 +7,7 @@ import {
   TextField,
   Typography,
   Box,
+  InputAdornment,
 } from "@mui/material";
 import { useNavigate } from "react-router-dom";
 import logo from "../../assets/LogoDesign.webp";
@@ -16,6 +17,8 @@ import { useForm } from "react-hook-form";
 import { useUserLogInMutation } from "../../Redux/API/userAPI";
 import Toast from "../Toast";
 import { useAuth } from "../Hooks/useAuth";
+import { FiMail, FiLock } from "react-icons/fi";
+import { FaArrowRightLong } from "react-icons/fa6";
 
 const schema = z.object({
   email: z.string().nonempty("Email is required").email("Invalid email format"),
@@ -43,7 +46,6 @@ const Login = () => {
       reset();
       navigate("/");
     } catch (error) {
-      console.log("error", error?.data?.message);
       setMsg(null);
       setTimeout(() => {
         setMsg(error?.data?.message);
@@ -52,49 +54,68 @@ const Login = () => {
   };
 
   return (
-    <div className="w-full min-h-screen bg-gray-900 text-white">
-      <Container sx={{ pt: { xs: 10 } }}>
-        {msg && <Toast value={msg} severity="error" />}
-
+    <div className="w-full min-h-screen bg-appbg">
+      {msg && <Toast value={msg} severity="error" />}
+      <Container
+        maxWidth="lg"
+        sx={{ minHeight: "100vh", display: "flex", alignItems: "center", py: { xs: 6, md: 0 } }}
+      >
         <Box
-          sx={{ display: "flex" }}
-          className="border border-gray-600 rounded-md"
+          className="card-soft overflow-hidden"
+          sx={{
+            display: "flex",
+            width: "100%",
+            borderRadius: "24px",
+            border: "none",
+          }}
         >
           <Box
             sx={{
-              width: "48%",
-              display: { xs: "none", md: "block" },
-              height: "500px",
+              width: "46%",
+              display: { xs: "none", md: "flex" },
+              flexDirection: "column",
+              justifyContent: "center",
+              alignItems: "center",
+              p: 6,
+              background: "linear-gradient(140deg,#6d5ae6 0%,#8a7bf0 45%,#e91367 120%)",
+              color: "#fff",
             }}
           >
-            <img src={logo} className="w-full h-full object-cover" />
+            <img
+              src={logo}
+              alt="EduLearn"
+              className="w-24 h-24 rounded-full object-cover mb-6 shadow-xl"
+            />
+            <Typography variant="h4" className="font-montserrat font-bold" sx={{ textAlign: "center" }}>
+              Welcome back to EduLearn
+            </Typography>
+            <Typography className="font-roboto" sx={{ mt: 2, textAlign: "center", opacity: 0.9, fontSize: "15px" }}>
+              Continue your learning journey. Sign in to access your courses,
+              track progress and unlock your potential.
+            </Typography>
           </Box>
+
           <Box
             sx={{
-              width: { xs: "95%", md: "48%" },
+              width: { xs: "100%", md: "54%" },
               display: "flex",
               flexDirection: "column",
               justifyContent: "center",
               alignItems: "center",
-              p: 2,
-              height: { xs: "400px", md: "auto" },
+              py: { xs: 6, md: 8 },
+              px: { xs: 3, sm: 6 },
             }}
           >
-            <img src={logo} className="w-16 h-16  rounded-full lg:hidden" />
-            <Typography
-              variant="h5"
-              className="font-montserrat font-semibold"
-              sx={{
-                color: "#673ab7",
-                textAlign: "center",
-                mt: 1,
-              }}
-            >
+            <img src={logo} className="w-16 h-16 rounded-full object-cover md:hidden mb-4" />
+            <Typography variant="h5" className="font-montserrat font-bold" sx={{ color: "#1e293b" }}>
               Welcome to EduLearn
+            </Typography>
+            <Typography className="font-roboto" sx={{ color: "#64748b", fontSize: "14px", mt: 1, mb: 4 }}>
+              Please sign in to continue
             </Typography>
 
             <form
-              className=" w-full sm:w-3/4  flex flex-col gap-3 mt-5  mx-auto"
+              className="w-full max-w-sm flex flex-col gap-4"
               onSubmit={handleSubmit(onSubmit)}
               autoComplete="off"
             >
@@ -106,20 +127,12 @@ const Login = () => {
                 {...register("email")}
                 error={!!errors.email}
                 helperText={errors.email?.message}
-                sx={{
-                  "& .MuiInputLabel-root": {
-                    color: "#fff",
-                    opacity: 0.5,
-                  },
-                  "& .MuiInputBase-input": {
-                    color: "#ffffff",
-                  },
-                  "& .MuiOutlinedInput-root": {
-                    "& fieldset": {
-                      borderColor: "#ffffff",
-                      opacity: 0.4,
-                    },
-                  },
+                InputProps={{
+                  startAdornment: (
+                    <InputAdornment position="start">
+                      <FiMail size={16} color="#6d5ae6" />
+                    </InputAdornment>
+                  ),
                 }}
               />
               <TextField
@@ -130,64 +143,44 @@ const Login = () => {
                 {...register("password")}
                 error={!!errors.password}
                 helperText={errors.password?.message}
-                sx={{
-                  "& .MuiInputLabel-root": {
-                    color: "#fff",
-                    opacity: 0.5,
-                  },
-                  "& .MuiInputBase-input": {
-                    color: "#ffffff",
-                  },
-                  "& .MuiOutlinedInput-root": {
-                    "& fieldset": {
-                      borderColor: "#ffffff",
-                      opacity: 0.4,
-                    },
-                  },
+                InputProps={{
+                  startAdornment: (
+                    <InputAdornment position="start">
+                      <FiLock size={16} color="#6d5ae6" />
+                    </InputAdornment>
+                  ),
                 }}
               />
               <Button
                 type="submit"
                 disabled={isSubmitting}
-                sx={{
-                  background: "#e91367",
-                  color: "#fff",
-                  padding: "7px 25px",
-                  textTransform: "capitalize",
-                  "&:hover": {
-                    transform: "scale(1.04)",
-                  },
-                }}
-                className="w-[max-content]"
+                className="btn-primary w-full"
+                endIcon={!isSubmitting && <FaArrowRightLong size={16} />}
+                sx={{ py: 1.2 }}
               >
                 {isSubmitting ? (
-                  <CircularProgress color="secondary" size="25px" />
+                  <CircularProgress size="24px" sx={{ color: "#fff" }} />
                 ) : (
                   "Login"
                 )}
               </Button>
             </form>
-            <Stack
-              direction="row"
-              justifyContent="center"
-              alignItems="center"
-              mt={{ xs: "20px", md: "10px" }}
-            >
-              <Typography
-                className="font-roboto"
-                sx={{ color: "#fff", fontSize: "14px" }}
-              >
-                Don't have an account?
+
+            <Stack direction="row" alignItems="center" sx={{ mt: 3 }}>
+              <Typography className="font-roboto" sx={{ color: "#64748b", fontSize: "14px" }}>
+                Don&apos;t have an account?
               </Typography>
               <Typography
                 onClick={() => navigate("/signup")}
                 sx={{
-                  color: "#673ab7",
-                  textDecoration: "underline",
+                  color: "#6d5ae6",
+                  fontWeight: 600,
                   fontSize: "14px",
-                  mt: -0.5,
+                  ml: 0.5,
+                  cursor: "pointer",
+                  "&:hover": { textDecoration: "underline" },
                 }}
-                className="font-roboto underline-offset-4 pl-1 cursor-pointer"
+                className="font-roboto"
               >
                 Signup
               </Typography>

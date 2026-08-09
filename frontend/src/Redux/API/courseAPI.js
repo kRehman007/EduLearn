@@ -1,13 +1,10 @@
-import {
-  createApi,
-  fakeBaseQuery,
-  fetchBaseQuery,
-} from "@reduxjs/toolkit/query/react";
+import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 
 export const courseAPISlice = createApi({
   reducerPath: "courseAPI",
   baseQuery: fetchBaseQuery({
     baseUrl: "http://localhost:5001",
+    credentials: "include",
   }),
   tagTypes: ["Ratings", "Students"],
   endpoints: (builder) => ({
@@ -16,6 +13,12 @@ export const courseAPISlice = createApi({
         url: "/admin/courses",
         method: "POST",
         body: formData,
+      }),
+    }),
+    deleteCourse: builder.mutation({
+      query: (id) => ({
+        url: `/admin/courses/${id}`,
+        method: "DELETE",
       }),
     }),
     getCourse: builder.mutation({
@@ -30,12 +33,20 @@ export const courseAPISlice = createApi({
         method: "POST",
         body: data,
       }),
+      invalidatesTags: ["Students"],
     }),
     getTotalStudents: builder.mutation({
       query: () => ({
         url: "/enrollment/total-students",
         method: "GET",
       }),
+    }),
+    getEnrollmentStatus: builder.query({
+      query: (courseID) => ({
+        url: `/enrollment/status/${courseID}`,
+        method: "GET",
+      }),
+      providesTags: ["Students"],
     }),
     addRating: builder.mutation({
       query: (data) => ({
@@ -62,9 +73,11 @@ export const courseAPISlice = createApi({
 export const {
   useGetSingleStudentQuery,
   useAddCourseMutation,
+  useDeleteCourseMutation,
   useGetCourseMutation,
   useAddStudentMutation,
   useGetTotalStudentsMutation,
+  useGetEnrollmentStatusQuery,
   useAddRatingMutation,
   useGetAllRatingsQuery,
 } = courseAPISlice;

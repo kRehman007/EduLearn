@@ -6,12 +6,11 @@ import Login from "./Components/Authentication/Login";
 import Signup from "./Components/Authentication/Signup";
 import DetailPage from "./Components/CourseDetail/DetailPage";
 import Dashboardpage from "./Components/Dashboard/Dashboardpage";
-import { useAuth } from "./Components/Hooks/useAuth";
 import ProtectedRoute from "./Components/ProtectedRoute";
+import AdminRoute from "./Components/AdminRoute";
 import PageNotFound from "./Components/PageNotFound";
 
 function App() {
-  const { user } = useAuth();
   return (
     <>
       <Routes>
@@ -24,8 +23,22 @@ function App() {
           }
         />
         <Route path="/courses" element={<Courses />} />
-        <Route path="/admin" element={<Pannel />} />
-        <Route path="/dashboard" element={<Dashboardpage />} />
+        <Route
+          path="/admin"
+          element={
+            <AdminRoute>
+              <Pannel />
+            </AdminRoute>
+          }
+        />
+        <Route
+          path="/dashboard"
+          element={
+            <AdminRoute>
+              <Dashboardpage />
+            </AdminRoute>
+          }
+        />
         <Route path="/login" element={<Login />} />
         <Route path="/signup" element={<Signup />} />
         <Route path="/course/:id/detail" element={<DetailPage />} />

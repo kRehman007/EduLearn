@@ -1,7 +1,7 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import Modal from "@mui/material/Modal";
 import Button from "@mui/material/Button";
-import { Typography, Box, TextField, CircularProgress } from "@mui/material";
+import { Typography, Box, TextField, CircularProgress, Avatar } from "@mui/material";
 import Rating from "@mui/material/Rating";
 import { useForm, Controller } from "react-hook-form";
 import { z } from "zod";
@@ -16,18 +16,20 @@ import { useParams } from "react-router-dom";
 
 const schema = z.object({
   rating: z.number().min(1, "Please provide a rating..."),
-  comment: z.string().min(1, "at least 10 characters are requird"),
+  comment: z.string().min(1, "Comment is required"),
 });
 const style = {
   position: "absolute",
   top: "50%",
   left: "50%",
   transform: "translate(-50%, -50%)",
+  width: { xs: "92%", sm: 420 },
   bgcolor: "background.paper",
-  borderRadius: "10px",
-  boxShadow: 24,
+  borderRadius: "20px",
+  boxShadow: "0 20px 60px rgba(30,41,59,0.25)",
   p: 4,
 };
+
 const RatingModal = ({ open, handleClose, refetchRatings }) => {
   const params = useParams();
   const { refetch } = useGetSingleStudentQuery({ id: params.id });
@@ -69,18 +71,34 @@ const RatingModal = ({ open, handleClose, refetchRatings }) => {
         aria-labelledby="spring-modal-title"
         aria-describedby="spring-modal-description"
         open={open}
+        disableEscapeKeyDown
       >
         <form onSubmit={handleSubmit(onSubmit)} autoComplete="off">
-          <Box sx={style} className="w-[350px] ">
+          <Box sx={style}>
             <Typography
               id="spring-modal-title"
               variant="h6"
               component="h2"
-              sx={{ color: "#673ab7" }}
+              className="font-montserrat"
+              sx={{ color: "#1e293b" }}
             >
-              Leave your Reviews
+              Leave your Review
             </Typography>
-            <div className="flex justify-center flex-col gap-1 mt-7">
+            <Typography className="font-roboto" sx={{ fontSize: "12px", color: "#e91367", mt: 0.5 }}>
+              * A rating and review are required to complete your enrollment.
+            </Typography>
+            <Box sx={{ display: "flex", alignItems: "center", gap: 1, mt: 2 }}>
+              <Avatar
+                alt={user?.fullname}
+                src={`https://avatar.iran.liara.run/public/boy?username=${encodeURIComponent(user?.fullname || "user")}`}
+                sx={{ width: 36, height: 36 }}
+              />
+              <Typography className="font-roboto" sx={{ fontSize: "14px", color: "#64748b" }}>
+                {user?.fullname}
+              </Typography>
+            </Box>
+
+            <div className="flex justify-center flex-col gap-1 mt-5">
               <Controller
                 name="rating"
                 control={control}
@@ -89,11 +107,13 @@ const RatingModal = ({ open, handleClose, refetchRatings }) => {
                     {...field}
                     value={field.value}
                     onChange={(e, newValue) => field.onChange(newValue)}
+                    size="large"
+                    sx={{ color: "#f59e0b" }}
                   />
                 )}
               />
               {errors.rating && (
-                <span className="text-sm text-red-600">
+                <span className="text-sm text-red-500 font-roboto">
                   {errors.rating.message}
                 </span>
               )}
@@ -104,25 +124,21 @@ const RatingModal = ({ open, handleClose, refetchRatings }) => {
               placeholder="leave your thoughts..."
               variant="standard"
               margin="dense"
-              error={!!errors.review}
-              helperText={errors.review?.message}
+              error={!!errors.comment}
+              helperText={errors.comment?.message}
               fullWidth
               multiline
+              minRows={2}
             />
 
             <Button
               type="submit"
-              sx={{
-                background: "#e91367",
-                color: "#fff",
-                font: "small-caption",
-                mt: 3,
-                float: "right",
-              }}
               disabled={isSubmitting}
+              className="btn-primary"
+              sx={{ mt: 3, px: 3, float: "right" }}
             >
               {isSubmitting ? (
-                <CircularProgress color="secondary" size="20px" />
+                <CircularProgress size="20px" sx={{ color: "#fff" }} />
               ) : (
                 "Submit"
               )}

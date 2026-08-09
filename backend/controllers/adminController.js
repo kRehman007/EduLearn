@@ -1,4 +1,6 @@
 const courseModel = require("../models/course-model");
+const StudentModel = require("../models/student-model");
+const ratingModel = require("../models/rating-model");
 const upload = require("../config/multer_config");
 
 const adminForm = async (req, res) => {
@@ -39,6 +41,32 @@ const adminForm = async (req, res) => {
   }
 };
 
+const adminDeleteCourse = async (req, res) => {
+  const { id } = req.params;
+
+  try {
+    const course = await courseModel.findById(id);
+    if (!course) {
+      return res.status(404).json({ message: "Course not found." });
+    }
+
+    await courseModel.findByIdAndDelete(id);
+
+    await StudentModel.updateMany(
+      { subjects: id },
+      { $pull: { subjects: id } }
+    );
+
+    await ratingModel.deleteMany({ course_name: id });
+
+    return res.status(200).json({ message: "Course deleted successfully." });
+  } catch (error) {
+    console.log("Error in course deletion", error);
+    return res.status(500).json({ message: "Failed to delete course." });
+  }
+};
+
 module.exports = {
   adminForm,
+  adminDeleteCourse,
 };

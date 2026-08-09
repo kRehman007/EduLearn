@@ -1,3 +1,115 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+:root {
+  --color-primary: #6d5ae6;
+  --color-primary-dark: #5a47d6;
+  --color-primary-light: #eeebff;
+  --color-accent: #e91367;
+  --color-accent-dark: #c60e57;
+  --color-accent-light: #fdeaf3;
+  --color-bg: #f6f7fb;
+  --color-surface: #ffffff;
+  --color-text: #1e293b;
+  --color-text-muted: #64748b;
+  --color-border: #e6e8f0;
+  --color-success: #10b981;
+  --shadow-soft: 0 10px 30px rgba(30, 41, 59, 0.08);
+  --shadow-card: 0 4px 20px rgba(30, 41, 59, 0.06);
+  --shadow-hover: 0 12px 32px rgba(109, 90, 230, 0.18);
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  margin: 0;
+  padding: 0;
+  background-color: var(--color-bg);
+  color: var(--color-text);
+  font-family: "Roboto", "Helvetica", "Arial", sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  font-family: "Montserrat", sans-serif;
+}
+
+@layer components {
+  .font-montserrat {
+    font-family: "Montserrat", sans-serif;
+  }
+  .font-poppins {
+    font-family: "Poppins", sans-serif;
+  }
+  .font-roboto {
+    font-family: "Roboto", sans-serif;
+  }
+
+  .text-gradient {
+    background: linear-gradient(
+      120deg,
+      var(--color-primary) 0%,
+      var(--color-accent) 100%
+    );
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+
+  .btn-primary {
+    background: linear-gradient(
+      120deg,
+      var(--color-primary) 0%,
+      var(--color-accent) 100%
+    ) !important;
+    color: #fff !important;
+    text-transform: capitalize !important;
+    font-weight: 600 !important;
+    border-radius: 10px !important;
+    box-shadow: 0 8px 20px rgba(109, 90, 230, 0.25) !important;
+    transition: all 0.25s ease !important;
+  }
+
+  .btn-primary:hover {
+    transform: translateY(-2px) scale(1.02);
+    box-shadow: 0 12px 26px rgba(233, 19, 103, 0.3) !important;
+  }
+
+  .card-soft {
+    background: var(--color-surface);
+    border: 1px solid var(--color-border);
+    border-radius: 16px;
+    box-shadow: var(--shadow-card);
+    transition: all 0.3s ease;
+  }
+
+  .card-soft:hover {
+    box-shadow: var(--shadow-hover);
+    transform: translateY(-4px);
+    border-color: var(--color-primary);
+  }
+}
+
+@keyframes fadeSlideIn {
+  from {
+    opacity: 0;
+    transform: translateY(12px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}

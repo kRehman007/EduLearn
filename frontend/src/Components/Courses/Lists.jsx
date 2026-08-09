@@ -5,175 +5,185 @@ import {
   Typography,
   TextField,
   MenuItem,
+  InputAdornment,
+  Box,
 } from "@mui/material";
-import React, { useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { FiSearch } from "react-icons/fi";
+import { FaArrowRightLong } from "react-icons/fa6";
+import { MdOutlineCategory } from "react-icons/md";
+import { FILTER_CATEGORIES } from "../../constants/courseCategories";
 
 const Lists = ({ courses = [] }) => {
   const [search, setSearch] = useState("");
   const [category, setCategory] = useState("All");
   const [filteredCourses, setFilteredCourses] = useState([]);
   const navigate = useNavigate();
-  const categories = [
-    {
-      value: "All",
-    },
-    {
-      value: "Technology",
-    },
-    {
-      value: "Business",
-    },
-    {
-      value: "Web Dev",
-    },
-  ];
-  const handleSearch = (e) => {
-    let updatedCourses;
+
+  const handleSearch = () => {
+    let updatedCourses = courses;
 
     if (search) {
       updatedCourses = courses.filter((course) =>
         course.course_title.toLowerCase().includes(search.toLowerCase())
       );
-      setFilteredCourses(updatedCourses);
     }
-    if (category !== "All") {
+
+    if (category !== "All" && !search) {
       updatedCourses = courses.filter((course) =>
         course.course_category.toLowerCase().includes(category.toLowerCase())
       );
-      setFilteredCourses(updatedCourses);
+    } else if (category !== "All") {
+      updatedCourses = updatedCourses.filter((course) =>
+        course.course_category.toLowerCase().includes(category.toLowerCase())
+      );
     }
+
+    setFilteredCourses(updatedCourses);
   };
+
   useEffect(() => {
     handleSearch();
   }, [search, category]);
 
   const coursesToDisplay =
     search || category !== "All" ? filteredCourses : courses;
+
   return (
-    <Container sx={{ mt: 5 }}>
-      <Typography
-        variant="h1"
-        className="font-montserrat font-bold"
-        sx={{ fontSize: { xs: "2rem", sm: "2.5rem" }, color: "#673ab7" }}
+    <Container maxWidth="lg" sx={{ mt: 5 }}>
+      <Box
+        sx={{
+          background: "linear-gradient(140deg,#6d5ae6 0%,#e91367 120%)",
+          borderRadius: "20px",
+          p: { xs: 4, sm: 6 },
+          color: "#fff",
+          textAlign: "center",
+        }}
       >
-        Explore Our Courses
-      </Typography>
-      <Typography
-        variant="h6"
-        className="font-poppins"
-        sx={{ fontSize: "1rem", color: "#e91363" }}
-      >
-        Find the best courses to upskill and achieve your goals!
-      </Typography>
+        <Typography
+          variant="h1"
+          className="font-montserrat font-bold"
+          sx={{ fontSize: { xs: "1.8rem", sm: "2.5rem" } }}
+        >
+          Explore Our Courses
+        </Typography>
+        <Typography variant="h6" className="font-poppins" sx={{ fontSize: "1rem", mt: 1, opacity: 0.9 }}>
+          Find the best courses to upskill and achieve your goals!
+        </Typography>
+      </Box>
+
       <Stack
         direction={{ xs: "column", sm: "row" }}
-        gap={{ xs: 1, sm: 2 }}
+        gap={{ xs: 2, sm: 2 }}
         justifyContent="center"
         alignItems="center"
-        sx={{ mt: 7 }}
+        sx={{ mt: 4 }}
       >
         <TextField
           value={search}
           onChange={(e) => setSearch(e.target.value)}
           label="Find your courses"
           variant="outlined"
-          sx={{ width: "300px" }}
+          sx={{ width: { xs: "100%", sm: "340px" }, background: "#fff" }}
+          InputProps={{
+            startAdornment: (
+              <InputAdornment position="start">
+                <FiSearch size={18} color="#6d5ae6" />
+              </InputAdornment>
+            ),
+          }}
         />
-        <Typography sx={{ fontWeight: "bold" }}>OR</Typography>
-        <Stack direction="row" gap={1} alignItems="center">
-          <TextField
-            select
-            onChange={(e) => setCategory(e.target.value)}
-            label="Select by category"
-            value={category}
-            sx={{ width: "300px" }}
-          >
-            {categories.map((option) => (
-              <MenuItem key={option.value} value={option.value}>
-                {option.value}
-              </MenuItem>
-            ))}
-          </TextField>
-        </Stack>
+        <Typography sx={{ fontWeight: 600, color: "#64748b" }}>OR</Typography>
+        <TextField
+          select
+          onChange={(e) => setCategory(e.target.value)}
+          label="Select by category"
+          value={category}
+          sx={{ width: { xs: "100%", sm: "300px" }, background: "#fff" }}
+          InputProps={{
+            startAdornment: (
+              <InputAdornment position="start">
+                <MdOutlineCategory size={18} color="#e91367" />
+              </InputAdornment>
+            ),
+          }}
+        >
+          {FILTER_CATEGORIES.map((option) => (
+            <MenuItem key={option} value={option}>
+              {option}
+            </MenuItem>
+          ))}
+        </TextField>
       </Stack>
+
       <Stack
         sx={{
-          mt: 7,
+          mt: 6,
           display: "grid",
           placeItems: "center",
-
           gridTemplateColumns: {
             xs: "repeat(1,1fr)",
             sm: "repeat(2,1fr)",
             md: "repeat(3,1fr)",
           },
-          gap: 2,
+          gap: 3,
         }}
       >
         {coursesToDisplay.length > 0 ? (
           coursesToDisplay?.map((course, index) => (
-            <Stack
+            <Box
               key={index}
-              direction="column"
-              gap={0}
-              className="border p-5 relative h-[380px] shadow-lg rounded-sm max-w-[350px]"
+              className="card-soft overflow-hidden w-full max-w-[360px]"
+              onClick={() =>
+                navigate(`/course/${course._id}/detail`, { state: course })
+              }
+              sx={{ cursor: "pointer" }}
             >
-              <img
-                src={course.instructor_image}
-                className="w-full max-h-[200px]  object-cover   rounded-md"
-              />
-              <Typography
-                className="font-poppins"
-                sx={{
-                  mt: 2,
-                  color: "#673ab7",
-                  fontWeight: "bold",
-                  fontSize: "17px",
-                }}
-              >
-                {course.course_title}
-              </Typography>
-              <Typography
-                className="font-roboto"
-                sx={{
-                  fontSize: "14px",
-                  wordWrap: "break-word",
-                }}
-              >
-                {course.course_desc.substring(0, 50)}...
-              </Typography>
-              <Typography sx={{ fontSize: "17px", fontWeight: "bold" }}>
-                ${course.course_price}
-              </Typography>
-              <Button
-                onClick={() =>
-                  navigate(`/course/${course._id}/detail`, { state: course })
-                }
-                sx={{
-                  backgroundColor: "#e91367",
-                  position: "absolute",
-                  bottom: "14px",
-                  color: "white",
-                  width: "max-content",
-                  textTransform: "capitalize",
-                  mt: 1,
-                  fontSize: "12px",
-
-                  "&:hover": {
-                    transform: "scale(1.04)",
-                  },
-                }}
-              >
-                Read More
-              </Button>
-            </Stack>
+              <Box sx={{ overflow: "hidden" }}>
+                <img
+                  src={course.instructor_image}
+                  alt={course.course_title}
+                  className="w-full h-[200px] object-cover transition-transform duration-300 hover:scale-105"
+                />
+              </Box>
+              <Box sx={{ p: 2.5 }}>
+                <Typography
+                  className="font-poppins"
+                  sx={{
+                    color: "#6d5ae6",
+                    fontWeight: 600,
+                    fontSize: "16px",
+                    textTransform: "capitalize",
+                    mb: 0.5,
+                  }}
+                >
+                  {course.course_title}
+                </Typography>
+                <Typography
+                  className="font-roboto"
+                  sx={{ fontSize: "13px", color: "#64748b", wordWrap: "break-word" }}
+                >
+                  {course.course_desc.substring(0, 80)}...
+                </Typography>
+                <Stack direction="row" justifyContent="space-between" alignItems="center" sx={{ mt: 1.5 }}>
+                  <Typography className="font-montserrat" sx={{ fontSize: "18px", fontWeight: 700, color: "#e91367" }}>
+                    ${course.course_price}
+                  </Typography>
+                  <Button
+                    className="btn-primary"
+                    sx={{ px: 2, py: 0.8, fontSize: "12px" }}
+                    endIcon={<FaArrowRightLong size={12} />}
+                  >
+                    Read More
+                  </Button>
+                </Stack>
+              </Box>
+            </Box>
           ))
         ) : (
-          <Typography
-            sx={{ fontSize: "20px", textAlign: "center", color: "#673ab7" }}
-          >
-            No course Found
+          <Typography sx={{ fontSize: "18px", textAlign: "center", color: "#64748b", mt: 4, gridColumn: "1/-1" }}>
+            No course found. Try a different search or category.
           </Typography>
         )}
       </Stack>

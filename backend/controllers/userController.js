@@ -17,9 +17,9 @@ const userSignUp = async (req, res) => {
   } catch (error) {
     console.log("Error in signingup...", error);
     if (error.code === 11000) {
-      res.status(400).json({ message: "Email already exists" });
+      return res.status(400).json({ message: "Email already exists" });
     }
-    res
+    return res
       .status(500)
       .json({ message: "Something went wrong. Please try again later." });
   }

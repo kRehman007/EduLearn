@@ -1,8 +1,9 @@
 import { Container, Typography, Stack, Box } from "@mui/material";
-import img from "../../assets/12.jpg";
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import { useLocation, useParams } from "react-router-dom";
 import { useGetSingleStudentQuery } from "../../Redux/API/courseAPI";
+import { FaChalkboardTeacher, FaDollarSign, FaGlobe, FaUsers } from "react-icons/fa";
+import { MdCategory } from "react-icons/md";
 
 const Detail2 = () => {
   const params = useParams();
@@ -13,78 +14,85 @@ const Detail2 = () => {
   useEffect(() => {
     setDetail(location?.state);
   }, []);
+
+  const infoItems = [
+    { icon: <FaChalkboardTeacher size={15} />, label: "Instructor Name", value: detail?.instructor_name },
+    { icon: <FaDollarSign size={15} />, label: "Price", value: `$${detail?.course_price}` },
+    { icon: <MdCategory size={15} />, label: "Category", value: detail?.course_category },
+    { icon: <FaGlobe size={15} />, label: "Language", value: "English" },
+    { icon: <FaUsers size={15} />, label: "Enrolled Students", value: data?.totalStudents ?? 0 },
+  ];
+
   return (
-    <Container sx={{ xs: 6, sm: 8 }}>
+    <Container maxWidth="lg" sx={{ mt: 6 }}>
       <Typography
         variant="h2"
         className="font-poppins"
-        sx={{
-          fontSize: "2rem",
-          mt: { xs: 6, sm: 8 },
-          fontWeight: "semibold",
-          color: "#673ab7",
-        }}
+        sx={{ fontSize: "1.8rem", fontWeight: 700, color: "#1e293b" }}
       >
-        Course Details
+        <span className="text-gradient">Course Details</span>
       </Typography>
+
       <Stack
         sx={{
           display: "grid",
           gridTemplateColumns: { xs: "repeat(1,1fr)", sm: "repeat(2,1fr)" },
-          gap: 3,
+          gap: 4,
         }}
         mt={3}
       >
         <Box
-          className="border p-3 rounded-md shadow-lg overflow-hidden col-span-1 order-2 sm:order-1"
-          sx={{
-            display: "flex",
-            flexDirection: "column",
-            gap: 1,
-            color: "#333",
-
-            wordWrap: "break-word",
-          }}
+          className="card-soft p-6 h-full"
+          sx={{ wordWrap: "break-word", order: { xs: 2, sm: 1 } }}
         >
-          <Typography sx={{ fontWeight: "bold" }} className="font-roboto">
-            Instructor Name:{" "}
-            <span style={{ fontWeight: "normal" }}>
-              {detail?.instructor_name}
-            </span>
-          </Typography>
-          <Typography
-            sx={{ fontWeight: "bold" }}
-            className="font-roboto max-w-full"
-          >
-            Instructor Bio:{" "}
-            <span style={{ fontWeight: "normal" }}>
+          <Stack direction="row" alignItems="center" gap={1.5} sx={{ mb: 2.5 }}>
+            <Box
+              sx={{
+                width: "46px",
+                height: "46px",
+                borderRadius: "12px",
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+                background: "#eeebff",
+                color: "#6d5ae6",
+              }}
+            >
+              <FaChalkboardTeacher size={20} />
+            </Box>
+            <Typography className="font-poppins font-semibold" sx={{ fontSize: "17px", color: "#1e293b" }}>
+              About the Instructor
+            </Typography>
+          </Stack>
+
+          <Stack direction="column" gap={1.5}>
+            {infoItems.map((item, i) => (
+              <Box key={i} sx={{ display: "flex", alignItems: "flex-start", gap: 1.5 }}>
+                <Box sx={{ color: "#e91367", fontSize: "15px", mt: 0.4 }}>{item.icon}</Box>
+                <Typography className="font-roboto" sx={{ fontSize: "14px", color: "#334155" }}>
+                  <span style={{ fontWeight: 600, color: "#1e293b" }}>{item.label}: </span>
+                  {item.value}
+                </Typography>
+              </Box>
+            ))}
+          </Stack>
+
+          <Box sx={{ mt: 2.5, p: 2, background: "#fdeaf3", borderRadius: "12px" }}>
+            <Typography className="font-roboto" sx={{ fontSize: "13px", color: "#334155", lineHeight: 1.7 }}>
+              <span style={{ fontWeight: 600, color: "#e91367" }}>Instructor Bio: </span>
               {detail?.instructor_bio}
-            </span>
-          </Typography>
-          <Typography sx={{ fontWeight: "bold" }} className="font-roboto">
-            Price:{" "}
-            <span style={{ fontWeight: "normal" }}>
-              ${detail?.course_price}
-            </span>
-          </Typography>
-          <Typography sx={{ fontWeight: "bold" }} className="font-roboto">
-            Category:{" "}
-            <span style={{ fontWeight: "normal" }}>
-              {detail?.course_category}
-            </span>
-          </Typography>
-          <Typography sx={{ fontWeight: "bold" }} className="font-roboto">
-            Language: <span style={{ fontWeight: "normal" }}>English</span>
-          </Typography>
-          <Typography sx={{ fontWeight: "bold" }} className="font-roboto">
-            Enrolled Students:{" "}
-            <span style={{ fontWeight: "normal" }}>{data?.totalStudents}</span>
-          </Typography>
+            </Typography>
+          </Box>
         </Box>
-        <Box className="border rounded-md p-3 shadow-lg w-full h-[400px] lg:w-3/4 overflow-hidden  order-1 sm:order-2">
+
+        <Box
+          className="card-soft overflow-hidden"
+          sx={{ order: { xs: 1, sm: 2 }, minHeight: { xs: "260px", sm: "100%" } }}
+        >
           <img
             src={detail?.instructor_image}
-            className="min-w-full h-full object-cover  rounded-md"
+            alt={detail?.course_title}
+            className="w-full h-full min-h-[260px] object-cover"
           />
         </Box>
       </Stack>
