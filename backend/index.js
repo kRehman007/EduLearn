@@ -51,6 +51,10 @@ app.use(
 );
 
 //Routes...
+
+app.get("/", (req, res) => {
+  res.send("Welcome to the EduLearn API");
+});
 app.get("/auth/check", checkForAuthentication("token"), (req, res) => {
   try {
     const user = req.user;
