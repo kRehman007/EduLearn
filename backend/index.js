@@ -1,4 +1,6 @@
 require("dotenv").config();
+const dns = require("dns");
+dns.setServers(["8.8.8.8", "1.1.1.1"]);
 require("./config/mongoose_connection");
 const express = require("express");
 const adminRouter = require("./routes/adminRouter");
@@ -85,4 +87,4 @@ app.use("/courses", courseRouter);
 app.use("/enrollment", studentRouter);
 app.use("/rating", ratingRouter);
 
-app.listen(5001, () => console.log(`Server Started at PORT NO: 5001`));
+app.listen(PORT, () => console.log(`Server Started at PORT NO: ${PORT}`));
