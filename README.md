@@ -170,7 +170,7 @@ npm run dev
 Create `backend/.env` with the following:
 
 ```env
-MONGODB_URL="mongodb://127.0.0.1:27017/learningplatform"
+MONGODB_URI="mongodb://127.0.0.1:27017/learningplatform"
 JWT_SECRET=your_secret_key_here
 FLASH_SESSION_SECRET=your_flash_secret_here
 MY_EMAIL=your_email@gmail.com
@@ -180,7 +180,7 @@ ADMIN_EMAIL=admin_email@gmail.com
 
 | Variable | Description |
 |---|---|
-| `MONGODB_URL` | MongoDB connection string |
+| `MONGODB_URI` | MongoDB connection string |
 | `JWT_SECRET` | Secret used to sign/verify JWT tokens |
 | `FLASH_SESSION_SECRET` | Secret for express-session / flash messages |
 | `MY_EMAIL` | Sender Gmail address for nodemailer |

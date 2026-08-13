@@ -18,18 +18,9 @@ const {
   checkForAuthentication,
 } = require("./middlewares/checkForAuthentication");
 
-//Middlewares...
-// app.use(
-//   cors({
-//     origin: "https://mern-frontend-self-eight.vercel.app",
-//     methods: "GET,POST,PUT,DELETE",
-//     allowedHeaders: "Content-Type,Authorization",
-//     credentials: true,
-//   })
-// );
+
 const allowedOrigins = [
-  "https://mern-frontend-self-eight.vercel.app",
-  "http://localhost:5173",
+   process.env.FRONTEND_URI
 ];
 
 app.use(
@@ -60,7 +51,6 @@ app.use(
 );
 
 //Routes...
-
 app.get("/auth/check", checkForAuthentication("token"), (req, res) => {
   try {
     const user = req.user;

@@ -3,7 +3,7 @@ import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 export const courseAPISlice = createApi({
   reducerPath: "courseAPI",
   baseQuery: fetchBaseQuery({
-    baseUrl: "http://localhost:5001",
+    baseUrl: import.meta.env.VITE_BACKEND_URI,
     credentials: "include",
   }),
   tagTypes: ["Ratings", "Students"],

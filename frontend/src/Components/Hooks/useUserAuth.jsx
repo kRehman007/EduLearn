@@ -9,7 +9,7 @@ const useUserAuth = () => {
   useEffect(() => {
     const fetchAuthUser = async () => {
       try {
-        const response = await axios.get("http://localhost:5001/auth/check", {
+        const response = await axios.get(`${import.meta.env.VITE_BACKEND_URI}/auth/check`, {
           withCredentials: true,
         });
 
