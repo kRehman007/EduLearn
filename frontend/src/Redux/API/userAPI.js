@@ -1,5 +1,4 @@
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
-console.log("VITE_BACKEND_URI:", import.meta.env.VITE_BACKEND_URI);
 export const userApiSlice = createApi({
   reducerPath: "userAPI",
   baseQuery: fetchBaseQuery({
